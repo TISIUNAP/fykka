@@ -15,6 +15,50 @@
 -- Volcando estructura de base de datos para fykka
 CREATE DATABASE IF NOT EXISTS `fykka` /*!40100 DEFAULT CHARACTER SET latin1 */;
 USE `fykka`;
+-- Volcando estructura para tabla fykka.usuarios
+CREATE TABLE IF NOT EXISTS `usuarios` (
+  `usu_ide` int(11) NOT NULL AUTO_INCREMENT,
+  `usu_nombre` varchar(50) DEFAULT NULL,
+  `usu_apellidos` varchar(50) DEFAULT NULL,
+  `usu_nivel` enum('SENIOR','MASTER','JUNIOR') DEFAULT NULL,
+  `usu_tipo` enum('SUPER USUARIO','USUARIO SIMPLE') DEFAULT NULL,
+  `usu_profesion` varchar(50) DEFAULT NULL,
+  `usu_correo` varchar(50) DEFAULT NULL,
+  `usu_telefono` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`usu_ide`)
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=latin1;
+
+-- Volcando datos para la tabla fykka.usuarios: ~3 rows (aproximadamente)
+DELETE FROM `usuarios`;
+/*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
+INSERT INTO `usuarios` (`usu_ide`, `usu_nombre`, `usu_apellidos`, `usu_nivel`, `usu_tipo`, `usu_profesion`, `usu_correo`, `usu_telefono`) VALUES
+  (1, 'MIGUEL', 'ACEITUNO ROJAS', 'SENIOR', 'SUPER USUARIO', NULL, 'aceituno@gmail.com', '917234129'),
+  (2, NULL, NULL, NULL, 'USUARIO SIMPLE', NULL, 'kevin@kevin.com', NULL),
+  (22, 'Kely Karina', 'Achata Paricahua', 'JUNIOR', 'USUARIO SIMPLE', 'USUARIO SIMPLE', 'kely@kely.com', '9123123131');
+/*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
+
+-- Volcando estructura para tabla fykka.roles
+CREATE TABLE IF NOT EXISTS `roles` (
+  `rol_ide` int(11) NOT NULL AUTO_INCREMENT,
+  `rol_nombre` varchar(100) DEFAULT NULL,
+  `rol_link` varchar(100) DEFAULT NULL,
+  `rol_tipo` enum('PRINCIPAL','PROYECTOS','TAREAS','OTROS') NOT NULL,
+  `rol_usuario` enum('SA','UN','AN','PO','SM') DEFAULT NULL,
+  `rol_icon` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`rol_ide`)
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+
+-- Volcando datos para la tabla fykka.roles: ~6 rows (aproximadamente)
+DELETE FROM `roles`;
+/*!40000 ALTER TABLE `roles` DISABLE KEYS */;
+INSERT INTO `roles` (`rol_ide`, `rol_nombre`, `rol_link`, `rol_tipo`, `rol_usuario`, `rol_icon`) VALUES
+  (1, 'Crear Proyecto', 'project/new_project', 'PROYECTOS', NULL, 'fa-plus'),
+  (2, 'Ver mis Proyectos', 'project/list_project', 'PROYECTOS', NULL, 'fa-tasks'),
+  (3, 'Mi Perfil', 'user/perfil', 'OTROS', NULL, 'fa-user'),
+  (4, 'Principal', 'project/home', 'PRINCIPAL', NULL, 'fa-home'),
+  (16, 'Tareas', 'project/tareas', 'PROYECTOS', NULL, 'fa-list'),
+  (17, 'Requerimientos', 'project/porequerimientos', 'PROYECTOS', NULL, 'fa-user-tie');
+/*!40000 ALTER TABLE `roles` ENABLE KEYS */;
 
 -- Volcando estructura para tabla fykka.login
 CREATE TABLE IF NOT EXISTS `login` (
@@ -70,21 +114,6 @@ INSERT INTO `proyecto` (`pro_ide`, `pro_nombre`, `pro_fecha_creacion`, `pro_fech
 	(10, 'TEsissmlknkjb', '2018-12-14', '0000-00-00', 'dssfsdfsfsdfsfsdfsd', 1, '2018-12-14 15:27:45', 0, 'ESPERA');
 /*!40000 ALTER TABLE `proyecto` ENABLE KEYS */;
 
--- Volcando estructura para tabla fykka.requerimientoresponsable
-CREATE TABLE IF NOT EXISTS `requerimientoresponsable` (
-  `rer_usu_ide` int(11) NOT NULL,
-  `rer_req_ide` int(11) NOT NULL,
-  PRIMARY KEY (`rer_usu_ide`,`rer_req_ide`),
-  KEY `FK_requerimientoresponsable_requerimientos` (`rer_req_ide`),
-  CONSTRAINT `FK_requerimientoresponsable_requerimientos` FOREIGN KEY (`rer_req_ide`) REFERENCES `requerimientos` (`req_ide`),
-  CONSTRAINT `FK_requerimientoresponsable_usuarios` FOREIGN KEY (`rer_usu_ide`) REFERENCES `usuarios` (`usu_ide`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- Volcando datos para la tabla fykka.requerimientoresponsable: ~0 rows (aproximadamente)
-DELETE FROM `requerimientoresponsable`;
-/*!40000 ALTER TABLE `requerimientoresponsable` DISABLE KEYS */;
-/*!40000 ALTER TABLE `requerimientoresponsable` ENABLE KEYS */;
-
 -- Volcando estructura para tabla fykka.requerimientos
 CREATE TABLE IF NOT EXISTS `requerimientos` (
   `req_ide` int(11) NOT NULL AUTO_INCREMENT,
@@ -101,28 +130,22 @@ DELETE FROM `requerimientos`;
 /*!40000 ALTER TABLE `requerimientos` DISABLE KEYS */;
 /*!40000 ALTER TABLE `requerimientos` ENABLE KEYS */;
 
--- Volcando estructura para tabla fykka.roles
-CREATE TABLE IF NOT EXISTS `roles` (
-  `rol_ide` int(11) NOT NULL AUTO_INCREMENT,
-  `rol_nombre` varchar(100) DEFAULT NULL,
-  `rol_link` varchar(100) DEFAULT NULL,
-  `rol_tipo` enum('PRINCIPAL','PROYECTOS','TAREAS','OTROS') NOT NULL,
-  `rol_usuario` enum('SA','UN','AN','PO','SM') DEFAULT NULL,
-  `rol_icon` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`rol_ide`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+-- Volcando estructura para tabla fykka.requerimientoresponsable
+CREATE TABLE IF NOT EXISTS `requerimientoresponsable` (
+  `rer_usu_ide` int(11) NOT NULL,
+  `rer_req_ide` int(11) NOT NULL,
+  PRIMARY KEY (`rer_usu_ide`,`rer_req_ide`),
+  KEY `FK_requerimientoresponsable_requerimientos` (`rer_req_ide`),
+  CONSTRAINT `FK_requerimientoresponsable_requerimientos` FOREIGN KEY (`rer_req_ide`) REFERENCES `requerimientos` (`req_ide`),
+  CONSTRAINT `FK_requerimientoresponsable_usuarios` FOREIGN KEY (`rer_usu_ide`) REFERENCES `usuarios` (`usu_ide`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- Volcando datos para la tabla fykka.roles: ~6 rows (aproximadamente)
-DELETE FROM `roles`;
-/*!40000 ALTER TABLE `roles` DISABLE KEYS */;
-INSERT INTO `roles` (`rol_ide`, `rol_nombre`, `rol_link`, `rol_tipo`, `rol_usuario`, `rol_icon`) VALUES
-	(1, 'Crear Proyecto', 'project/new_project', 'PROYECTOS', NULL, 'fa-plus'),
-	(2, 'Ver mis Proyectos', 'project/list_project', 'PROYECTOS', NULL, 'fa-tasks'),
-	(3, 'Mi Perfil', 'user/perfil', 'OTROS', NULL, 'fa-user'),
-	(4, 'Principal', 'project/home', 'PRINCIPAL', NULL, 'fa-home'),
-	(16, 'Tareas', 'project/tareas', 'PROYECTOS', NULL, 'fa-list'),
-	(17, 'Requerimientos', 'project/porequerimientos', 'PROYECTOS', NULL, 'fa-user-tie');
-/*!40000 ALTER TABLE `roles` ENABLE KEYS */;
+-- Volcando datos para la tabla fykka.requerimientoresponsable: ~0 rows (aproximadamente)
+DELETE FROM `requerimientoresponsable`;
+/*!40000 ALTER TABLE `requerimientoresponsable` DISABLE KEYS */;
+/*!40000 ALTER TABLE `requerimientoresponsable` ENABLE KEYS */;
+
+
 
 -- Volcando estructura para tabla fykka.rolesproyecto
 CREATE TABLE IF NOT EXISTS `rolesproyecto` (
@@ -181,27 +204,6 @@ INSERT INTO `tareas` (`tar_ide`, `tar_usu_ide`, `tar_rol_ide`) VALUES
 	(5, 22, 4);
 /*!40000 ALTER TABLE `tareas` ENABLE KEYS */;
 
--- Volcando estructura para tabla fykka.usuarios
-CREATE TABLE IF NOT EXISTS `usuarios` (
-  `usu_ide` int(11) NOT NULL AUTO_INCREMENT,
-  `usu_nombre` varchar(50) DEFAULT NULL,
-  `usu_apellidos` varchar(50) DEFAULT NULL,
-  `usu_nivel` enum('SENIOR','MASTER','JUNIOR') DEFAULT NULL,
-  `usu_tipo` enum('SUPER USUARIO','USUARIO SIMPLE') DEFAULT NULL,
-  `usu_profesion` varchar(50) DEFAULT NULL,
-  `usu_correo` varchar(50) DEFAULT NULL,
-  `usu_telefono` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`usu_ide`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=latin1;
-
--- Volcando datos para la tabla fykka.usuarios: ~3 rows (aproximadamente)
-DELETE FROM `usuarios`;
-/*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` (`usu_ide`, `usu_nombre`, `usu_apellidos`, `usu_nivel`, `usu_tipo`, `usu_profesion`, `usu_correo`, `usu_telefono`) VALUES
-	(1, 'MIGUEL', 'ACEITUNO ROJAS', 'SENIOR', 'SUPER USUARIO', NULL, 'aceituno@gmail.com', '917234129'),
-	(2, NULL, NULL, NULL, 'USUARIO SIMPLE', NULL, 'kevin@kevin.com', NULL),
-	(22, 'Kely Karina', 'Achata Paricahua', 'JUNIOR', 'USUARIO SIMPLE', 'USUARIO SIMPLE', 'kely@kely.com', '9123123131');
-/*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 
 -- Volcando estructura para disparador fykka.roles
 SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_ALL_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER';

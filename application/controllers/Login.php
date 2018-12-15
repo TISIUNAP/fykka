@@ -31,39 +31,33 @@ class Login extends CI_Controller {
 			if ($datausu==false) {
 				redirect(site_url('login/index/error-usuario-clave-incorrectos#team'));
 			} else {
+				if ($datausu[0]->usu_tipo=='SUPER USUARIO') {
 				$misession=array(
 				"login"=>"!s10g!n",
-				"datos"=>$datausu[0]->usu_nombre.", ".$datausu[0]->usu_apellidos,
+				"datos"=>$datausu[0]->usu_apellidos.", ".$datausu[0]->usu_nombre,
 				"ide"=>$datausu[0]->usu_ide,
 				"tipo"=>$datausu[0]->usu_tipo,
-				"nivel"=>$datausu[0]->usu_tipo,
 				);
+				} 
+				else if ($datausu[0]->usu_tipo=='USUARIO NORMAL') {
+					$misession=array(
+					"login"=>"!s10g!n",
+					"datos"=>$datausu[0]->usu_apellidos.", ".$datausu[0]->usu_nombre,
+					"ide"=>$datausu[0]->usu_ide,
+					"tipo"=>$datausu[0]->usu_tipo,
+					);
+				} 
+				else if ($datausu[0]->usu_tipo=='USUARIO EXPERTO') {
+					$misession=array(
+					"login"=>"!s10g!n",
+					"datos"=>$result[0]->usu_apellidos.", ".$result[0]->usu_nombres,
+					"ide"=>$result[0]->usu_ide,
+					"tipo"=>$result[0]->usu_tipo,
+					);
+				} 
 			}
 			
-			if ($_POST['tipo']=='SUPER USUARIO') {
-				$misession=array(
-				"login"=>"!s10g!n",
-				"datos"=>$result[0]->usua_apellidos.", ".$result[0]->usua_nombres,
-				"ide"=>$result[0]->usua_ide,
-				"tipo"=>$_POST["tipo"],
-				);
-			} 
-			else if ($_POST['tipo']=='USUARIO NORMAL') {
-				$misession=array(
-				"login"=>"!s10g!n",
-				"datos"=>$result[0]->usua_apellidos.", ".$result[0]->usua_nombres,
-				"ide"=>$result[0]->usua_ide,
-				"tipo"=>$_POST["tipo"],
-				);
-			} 
-			else if ($_POST['tipo']=='USUARIO EXPERTO') {
-				$misession=array(
-				"login"=>"!s10g!n",
-				"datos"=>$result[0]->usua_apellidos.", ".$result[0]->usua_nombres,
-				"ide"=>$result[0]->usua_ide,
-				"tipo"=>$_POST["tipo"],
-				);
-			} 
+			
 			$this->session->set_userdata($misession);
 
 			redirect(site_url('sistema'));
